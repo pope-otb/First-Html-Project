@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choix de matière</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin: 50px auto;
+            max-width: 600px;
+            text-align: center;
+        }
+        select, input[type="date"] {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+<button onclick="window.history.back();">Retour</button>
+<div class="container">
+    <h1><u>Choisissez une matière</u></h1>
+    <select id="subjectSelect">
+        <option value="">-- Sélectionnez une matière --</option>
+        <option value="maths">Maths</option>
+        <option value="nsi">NSI</option>
+        <option value="svt">SVT</option>
+        <option value="ses">SES</option>
+        <option value="hggsp">HGGSP</option>
+    </select>
+
+    <div id="planning" style="display: none;">
+        <h2>Planning de <span id="selectedSubject"></span></h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Jour</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="datesTable">
+                <!-- Les dates apparaîtront ici -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    var subjects = {
+        "maths": ["2024-11-22", "2025-01-31", "2025-04-04", "2025-05-23"],
+        "nsi": ["2024-11-08", "2025-01-10", "2025-03-21"],
+    };
+
+    document.getElementById('subjectSelect').addEventListener('change', function() {
+        var subject = this.value;
+        var planningDiv = document.getElementById('planning');
+        var datesTable = document.getElementById('datesTable');
+        var selectedSubject = document.getElementById('selectedSubject');
+
+        if (subject) {
+            selectedSubject.textContent = subject.toUpperCase();
+            planningDiv.style.display = 'block';
+            datesTable.innerHTML = ''; // Réinitialise le tableau
+
+            // Générer les dates modifiables
+            subjects[subject].forEach(function(date, index) {
+                var row = document.createElement('tr');
+                var dayCell = document.createElement('td');
+                var dateCell = document.createElement('td');
+                var inputDate = document.createElement('input');
+                inputDate.type = 'date';
+                inputDate.value = date;
+
+                inputDate.addEventListener('change', function() {
+                    subjects[subject][index] = this.value; // Mise à jour des dates
+                });
+
+                dayCell.textContent = "Jour " + (index + 1);
+                dateCell.appendChild(inputDate);
+                row.appendChild(dayCell);
+                row.appendChild(dateCell);
+                datesTable.appendChild(row);
+            });
+        } else {
+            planningDiv.style.display = 'none'; // Masquer si aucune matière n'est sélectionnée
+        }
+    });
+</script>
+
+</body>
+</html>
+
